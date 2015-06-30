@@ -1,0 +1,44 @@
+<package>
+  <name>lattice_planner</name>
+  <version>0.0.0</version>
+  <description>
+     A lattice planner library for time dependent planning on a layered
+     dynamic cost map. The planner can be used as a global planner plugin
+     for the ROS navigation stack
+  </description>
+  <maintainer email="marinakollmitz@gmail.com">Marina Kollmitz</maintainer>
+  <license>BSD</license>
+
+  <author>Marina Kollmitz</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>costmap_2d</build_depend>
+  <build_depend>dynamic_reconfigure</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>nav_core</build_depend>
+  <build_depend>nav_msgs</build_depend>
+  <build_depend>navfn</build_depend>
+  <build_depend>pluginlib</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>tf</build_depend>
+  <build_depend>message_generation</build_depend>
+  <build_depend>dynamic_social_costmap</build_depend>
+
+  <run_depend>costmap_2d</run_depend>
+  <run_depend>dynamic_reconfigure</run_depend>
+  <run_depend>geometry_msgs</run_depend>
+  <run_depend>nav_core</run_depend>
+  <run_depend>nav_msgs</run_depend>
+  <run_depend>navfn</run_depend>
+  <run_depend>pluginlib</run_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>tf</run_depend>
+  <run_depend>message_runtime</run_depend>
+  <run_depend>dynamic_social_costmap</run_depend>
+  
+  <export>
+      <nav_core plugin="${prefix}/global_planner_plugin.xml" />
+  </export> 
+
+</package>

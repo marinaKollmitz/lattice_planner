@@ -1,0 +1,7 @@
+<library path="lib/liblattice_planner">
+  <class name="lattice_planner/TBPlanner" type="lattice_planner::TBLatticePlanner" base_class_type="nav_core::BaseGlobalPlanner">
+    <description>
+      A implementation of a time bounded planner
+    </description>
+  </class>
+</library>
