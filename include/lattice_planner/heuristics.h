@@ -37,7 +37,7 @@
 #ifndef HEURISTICS_H
 #define HEURISTICS_H
 
-#include <dynamic_social_costmap/dynamic_costmap.h>
+#include <lattice_planner/dynamic_costmap.h>
 #include <lattice_planner/state.h>
 #include <lattice_planner/motion_constraints.h>
 #include <lattice_planner/dijkstra.h>
@@ -88,8 +88,7 @@ public:
    *        @see CostManager
    * @param motion_constraints velocity and acceleration limits of the robot
    */
-  Heuristics(dynamic_costmap::DynamicCostmap* costmap,
-             CostManager::CostFactors cost_factors,
+  Heuristics(DynamicCostmap* costmap, CostManager::CostFactors cost_factors,
              MotionConstraints motion_constraints);
 
   /**
@@ -213,7 +212,7 @@ public:
   void publishHeuristic();
 
 private:
-  dynamic_costmap::DynamicCostmap* costmap_; ///< dynamic cost map used for planning
+  DynamicCostmap* costmap_; ///< dynamic cost map used for planning
   CostManager::CostFactors cost_factors_; ///< cost factors, as used in the defined cost function
   MotionConstraints motion_constraints_; ///< velocity and acceleration limits of the robot
   DijkstraExpansion* grid_expander_; ///< Dijkstra expansion instance

@@ -16,7 +16,6 @@ find_package(catkin REQUIRED
     roscpp
     tf
     message_generation
-    dynamic_social_costmap
 )
 
 add_message_files(

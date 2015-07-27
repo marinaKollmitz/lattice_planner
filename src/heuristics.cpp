@@ -39,7 +39,7 @@
 namespace lattice_planner
 {
 
-Heuristics::Heuristics(dynamic_costmap::DynamicCostmap *costmap,
+Heuristics::Heuristics(DynamicCostmap *costmap,
                        CostManager::CostFactors cost_factors,
                        MotionConstraints motion_constraints) :
   costmap_(costmap),
@@ -50,11 +50,12 @@ Heuristics::Heuristics(dynamic_costmap::DynamicCostmap *costmap,
   estimate_rotation_to_goal_(false),
   motion_constraints_(motion_constraints)
 {
-  unsigned int nx = costmap->getSizeInCellsX();
-  unsigned int ny = costmap->getSizeInCellsY();
+  unsigned int nx = costmap->getStaticROSCostmap()->getCostmap()->getSizeInCellsX();
+  unsigned int ny = costmap->getStaticROSCostmap()->getCostmap()->getSizeInCellsY();
+  double resolution = costmap->getStaticROSCostmap()->getCostmap()->getResolution();
 
   double time_factor =
-      (costmap_->getResolution()/(motion_constraints.max_vel_x * costmap->getTimeResolution()))
+      (resolution/(motion_constraints.max_vel_x * costmap->getTimeResolution().toSec()))
       *cost_factors.time_cost;
 
   grid_expander_ = new DijkstraExpansion(nx, ny);
@@ -66,9 +67,12 @@ Heuristics::Heuristics(dynamic_costmap::DynamicCostmap *costmap,
 
 bool Heuristics::expand(int goal_x, int goal_y)
 {
-  int num_cells = costmap_->getSizeInCellsX() * costmap_->getSizeInCellsY();
-  return grid_expander_->expand(costmap_->getStaticMap()->getCharMap(), goal_x,
-                                goal_y, num_cells, heuristics_);
+  unsigned int nx = costmap_->getStaticROSCostmap()->getCostmap()->getSizeInCellsX();
+  unsigned int ny = costmap_->getStaticROSCostmap()->getCostmap()->getSizeInCellsY();
+  unsigned char* char_costmap = costmap_->getStaticROSCostmap()->getCostmap()->getCharMap();
+
+  int num_cells = nx * ny;
+  return grid_expander_->expand(char_costmap, goal_x, goal_y, num_cells, heuristics_);
 }
 
 void Heuristics::estimateAdditional(bool estimate_deceleration_at_goal,
@@ -84,7 +88,9 @@ float Heuristics::getHeuristic(State *state, Pose goal_pose)
 {
   if(heuristics_ != NULL)
   {
-    int num_cells = costmap_->getSizeInCellsX() * costmap_->getSizeInCellsY();
+    unsigned int nx = costmap_->getStaticROSCostmap()->getCostmap()->getSizeInCellsX();
+    unsigned int ny = costmap_->getStaticROSCostmap()->getCostmap()->getSizeInCellsY();
+    int num_cells = nx * ny;
 
     if(state->state_i.grid_cell < num_cells)
     {
@@ -121,7 +127,7 @@ double Heuristics::estimateTurnToGoal(State* state, Pose goal_pose)
   //distance of the goal. Add maximum angle outside. Encourages turn in place
   //at the goal
 
-  double time_delta = costmap_->getTimeResolution();
+  double time_delta = costmap_->getTimeResolution().toSec();
 
   double rot_cost = 0;
   double distance = state->pose.getDistance(goal_pose);
@@ -149,7 +155,7 @@ double Heuristics::estimateDecelerationAtGoal(State* state, Pose goal_pose)
   //distance to goal. Add maximum deceleration time outside. Encourages
   //decelerating close to the goal
 
-  double time_delta = costmap_->getTimeResolution();
+  double time_delta = costmap_->getTimeResolution().toSec();
 
   double distance = state->pose.getDistance(goal_pose);
   double decel_radius = time_delta * motion_constraints_.max_vel_x;
@@ -188,15 +194,15 @@ void Heuristics::publishHeuristic(float* heuristics)
   {
     nav_msgs::OccupancyGrid grid;
     // Publish Whole Grid
-    grid.header.frame_id = costmap_->getFixedFrameId();
+    grid.header.frame_id = costmap_->getStaticROSCostmap()->getGlobalFrameID();
     grid.header.stamp = ros::Time::now();
 
-    grid.info.resolution = costmap_->getResolution();
-    grid.info.width = costmap_->getSizeInCellsX();
-    grid.info.height = costmap_->getSizeInCellsY();
+    grid.info.resolution = costmap_->getStaticROSCostmap()->getCostmap()->getResolution();
+    grid.info.width = costmap_->getStaticROSCostmap()->getCostmap()->getSizeInCellsX();
+    grid.info.height = costmap_->getStaticROSCostmap()->getCostmap()->getSizeInCellsY();
 
-    grid.info.origin.position.x = costmap_->getOriginX();
-    grid.info.origin.position.y = costmap_->getOriginY();
+    grid.info.origin.position.x = costmap_->getStaticROSCostmap()->getCostmap()->getOriginX();
+    grid.info.origin.position.y = costmap_->getStaticROSCostmap()->getCostmap()->getOriginY();
     grid.info.origin.position.z = 0.05;
     grid.info.origin.orientation.w = 1.0;
 

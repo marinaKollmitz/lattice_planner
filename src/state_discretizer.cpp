@@ -39,13 +39,15 @@
 namespace lattice_planner
 {
 
-StateDiscretizer::StateDiscretizer(dynamic_costmap::DynamicCostmap *costmap,
+StateDiscretizer::StateDiscretizer(DynamicCostmap *costmap,
                                    MotionConstraints motion_constraints) :
   costmap_(costmap),
-  time_resolution_(costmap->getTimeResolution()),
+  time_resolution_(costmap->getTimeResolution().toSec()),
   motion_constraints_(motion_constraints)
 {
-  num_gridcells_ = costmap->getSizeInCellsX() * costmap->getSizeInCellsY();
+  double nx = costmap->getStaticROSCostmap()->getCostmap()->getSizeInCellsX();
+  double ny = costmap->getStaticROSCostmap()->getCostmap()->getSizeInCellsY();
+  num_gridcells_ = nx * ny;
 
   //calculate number of discrete angles for dynamic settings
   num_orientations_ = getNumDiscreteAngles(motion_constraints.acc_phi,
@@ -105,9 +107,9 @@ bool StateDiscretizer::getCellPosition(double x, double y, unsigned int &x_i,
                                        unsigned int &y_i, unsigned int &index)
 {
   //find the corresponding grid cell and x y coordinate
-  if(costmap_->worldToMap(x, y, x_i, y_i))
+  if(costmap_->getStaticROSCostmap()->getCostmap()->worldToMap(x, y, x_i, y_i))
   {
-    index = costmap_->getIndex(x_i, y_i);
+    index = costmap_->getStaticROSCostmap()->getCostmap()->getIndex(x_i, y_i);
     return true;
   }
 

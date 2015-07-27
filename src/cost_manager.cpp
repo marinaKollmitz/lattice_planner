@@ -39,7 +39,7 @@
 namespace lattice_planner
 {
 
-CostManager::CostManager(dynamic_costmap::DynamicCostmap *dynamic_costmap,
+CostManager::CostManager(DynamicCostmap* dynamic_costmap,
                          MotionConstraints motion_constaints,
                          CostFactors cost_factors) :
   dynamic_costmap_(dynamic_costmap),

@@ -23,7 +23,6 @@
   <build_depend>roscpp</build_depend>
   <build_depend>tf</build_depend>
   <build_depend>message_generation</build_depend>
-  <build_depend>dynamic_social_costmap</build_depend>
 
   <run_depend>costmap_2d</run_depend>
   <run_depend>dynamic_reconfigure</run_depend>
@@ -35,8 +34,7 @@
   <run_depend>roscpp</run_depend>
   <run_depend>tf</run_depend>
   <run_depend>message_runtime</run_depend>
-  <run_depend>dynamic_social_costmap</run_depend>
-  
+
   <export>
       <nav_core plugin="${prefix}/global_planner_plugin.xml" />
   </export> 

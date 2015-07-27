@@ -59,9 +59,7 @@
 #include <lattice_planner/hasher.h>
 #include <lattice_planner/Path.h>
 #include <lattice_planner/cost_manager.h>
-
-#include <dynamic_social_costmap/dynamic_costmap.h>
-#include <dynamic_social_costmap/dynamic_social_costmap.h>
+#include <lattice_planner/dynamic_costmap.h>
 
 #define SQRT2 1.414213562
 //#define DEBUG
@@ -279,7 +277,7 @@ private:
   bool planning_timed_out_; ///< whether the planning is timed out
 
   //auxiliary classes
-  dynamic_costmap::DynamicCostmap* dynamic_costmap_; ///< dynamic costmap instance
+  DynamicCostmap* dynamic_costmap_; ///< dynamic costmap instance
   StateDiscretizer* discretizer_; ///< state discretizer instance
   TrajectoryRollout* trajectory_rollout_; ///< trajectory rollout instance
   Heuristics* heuristic_calc_; ///< heuristics calculator

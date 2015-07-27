@@ -37,7 +37,7 @@
 #ifndef _COSTMANAGER_H
 #define _COSTMANAGER_H
 
-#include <dynamic_social_costmap/dynamic_costmap.h>
+#include <lattice_planner/dynamic_costmap.h>
 #include <lattice_planner/state.h>
 #include <lattice_planner/motion_constraints.h>
 
@@ -82,8 +82,7 @@ public:
    * @param motion_constaints velocity and acceleration limits of the robot
    * @param cost_factors weights for the individual cost components of the defined cost function
    */
-  CostManager(dynamic_costmap::DynamicCostmap* dynamic_costmap,
-              MotionConstraints motion_constaints,
+  CostManager(DynamicCostmap *dynamic_costmap, MotionConstraints motion_constaints,
               CostFactors cost_factors);
 
   /**
@@ -111,7 +110,7 @@ private:
    */
   CostManager();
 
-  dynamic_costmap::DynamicCostmap* dynamic_costmap_; ///< dynamic cost map with time layers
+  DynamicCostmap* dynamic_costmap_; ///< dynamic cost map with time layers
   MotionConstraints motion_constraints_; ///< velocity and acceleration limits of the robot
   CostFactors cost_factors_; ///< weights of the cost aspects in the defined cost function
 };

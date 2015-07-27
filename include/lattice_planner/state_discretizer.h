@@ -42,7 +42,7 @@
 #include <lattice_planner/velocity.h>
 #include <lattice_planner/discrete_state.h>
 #include <lattice_planner/motion_constraints.h>
-#include <dynamic_social_costmap/dynamic_costmap.h>
+#include <lattice_planner/dynamic_costmap.h>
 
 namespace lattice_planner
 {
@@ -61,8 +61,7 @@ public:
    * @param costmap dynamic costmap for planning
    * @param motion_constraints velocity and acceleration limits of the robot
    */
-  StateDiscretizer(dynamic_costmap::DynamicCostmap* costmap,
-                   MotionConstraints motion_constraints);
+  StateDiscretizer(DynamicCostmap* costmap, MotionConstraints motion_constraints);
 
   /**
    * @brief calculate the number of discrete angles necessary to represent the
@@ -147,7 +146,7 @@ private:
   StateDiscretizer();
 
   MotionConstraints motion_constraints_; ///< velocity and acceleration limits of the robot
-  dynamic_costmap::DynamicCostmap* costmap_; ///< dynamic cost map for planning
+  DynamicCostmap* costmap_; ///< dynamic cost map for planning
 
   int num_gridcells_; ///< number of grid cells in the discrete map
   int num_orientations_; ///< number of discrete orientations

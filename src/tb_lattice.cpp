@@ -69,6 +69,8 @@ AStarLattice::AStarLattice(std::string name,costmap_2d::Costmap2DROS *costmap)
 
   //get planner behavior params from ros param server
 
+  std::string dynamic_layers_plugin_name;
+
   //costs
   CostManager::CostFactors cost_factors;
   private_nh.param("lethal_cost", cost_factors.lethal_cost,
@@ -77,6 +79,7 @@ AStarLattice::AStarLattice(std::string name,costmap_2d::Costmap2DROS *costmap)
   private_nh.param("step_cost_factor", cost_factors.step_cost, 20.0);
   private_nh.param("rotation_cost_factor", cost_factors.rotation_cost, 5.0);
   private_nh.param("environment_cost_factor", cost_factors.environment_cost, 1.0);
+  private_nh.param("dynamic_layers_plugin", dynamic_layers_plugin_name, std::string("undefined"));
 
   //planner preferences
   double collision_check_time_res;
@@ -114,13 +117,12 @@ AStarLattice::AStarLattice(std::string name,costmap_2d::Costmap2DROS *costmap)
   }
 
   //dynamic costmap for costs associated with static and dynamic obstacles
-  dynamic_costmap_ =
-      new dynamic_costmap::DynamicSocialCostmap(name, costmap, max_timesteps_,
-                                                ros::Duration(time_resolution_),
-                                                collision_check_time_res);
+  dynamic_costmap_ = new DynamicCostmap(costmap, max_timesteps_,
+                                        ros::Duration(time_resolution_),
+                                        dynamic_layers_plugin_name);
 
-  //time resolution we need to capture all grid cells while moving during one time step
-  map_index_check_time_inkr_ = 0.5 * dynamic_costmap_->getResolution() / motion_constraints.max_vel_x;
+  double resolution = dynamic_costmap_->getStaticROSCostmap()->getCostmap()->getResolution();
+  map_index_check_time_inkr_ = 0.5 * resolution / motion_constraints.max_vel_x;
 
   //cost manager for cost calculation
   cost_calc_ = new CostManager(dynamic_costmap_, motion_constraints, cost_factors);
@@ -155,7 +157,6 @@ AStarLattice::~AStarLattice()
     delete (*it);
   }
 
-  delete dynamic_costmap_;
   delete discretizer_;
   delete trajectory_rollout_;
   delete heuristic_calc_;
@@ -230,7 +231,7 @@ bool AStarLattice::findReplanningWaypoint(ros::Time conti_time,
     {
       ROS_DEBUG("turn in place. update pose with amcl");
       tf::Stamped<tf::Pose> robot_pose;
-      if(dynamic_costmap_->getStaticRosMap()->getRobotPose(robot_pose))
+      if(dynamic_costmap_->getStaticROSCostmap()->getRobotPose(robot_pose))
       {
         conti_pose.pose.position.x = robot_pose.getOrigin().getX();
         conti_pose.pose.position.y = robot_pose.getOrigin().getY();
@@ -429,7 +430,8 @@ bool AStarLattice::getPath(geometry_msgs::PoseStamped start,
   //publish search tree
   if(publish_expanded_)
   {
-    expanded_paths_.header.frame_id = dynamic_costmap_->getFixedFrameId();
+    expanded_paths_.header.frame_id =
+        dynamic_costmap_->getStaticROSCostmap()->getGlobalFrameID();
     expanded_paths_.header.stamp = path_time_;
     expanded_paths_pub_.publish(expanded_paths_);
   }
@@ -743,8 +745,9 @@ lattice_planner::Path AStarLattice::retracePath(State* state)
 
   while(state != 0)
   {
-    one_pose = state->pose.getStampedPose(dynamic_costmap_->getFixedFrameId(),
-                                          state->time);
+    std::string fixed_frame =
+        dynamic_costmap_->getStaticROSCostmap()->getGlobalFrameID();
+    one_pose = state->pose.getStampedPose(fixed_frame, state->time);
 
     one_vel.linear.x = state->vel.vel_x;
     one_vel.angular.z = state->vel.vel_phi;
