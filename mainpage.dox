@@ -13,6 +13,7 @@ cost factors:
 - step_cost_factor --> cost factor for path length
 - rotation_cost_factor --> cost factor defined in the dynamic environment, according to the dynamic cost map
 - environment_cost_factor --> cost factor for the accumulated turns along a planned path
+- dynamic_layers_plugin --> fully qualified plugin type for dynamic layers to be used (must adhere to lattice_planner::DynamicLayers interface. See pluginlib doc on ROS wiki for help)
 
 planner preferences:
 - allow_unknown --> whether the planner is allowed to expand into unknown map regions
