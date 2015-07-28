@@ -1,0 +1,7 @@
+to generate Doxygen documentation (www.doxygen.org) for the lattice_planner package, do:
+--
+$ roscd lattice_planner
+$ doxygen Doxyfile
+-- 
+and open index.html from doc/html folder
+
