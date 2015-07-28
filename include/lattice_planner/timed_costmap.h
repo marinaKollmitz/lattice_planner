@@ -263,6 +263,7 @@ public:
   }
 
   ros::Time time; ///< time represented by layer
+  int time_index; ///< time index (time step) of layer
   int size_x; ///< number of cells in x
   int size_y; ///< number of cells in y
   double origin_x; ///< map origin in x
