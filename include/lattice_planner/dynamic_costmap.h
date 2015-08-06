@@ -70,23 +70,33 @@ public:
   DynamicCostmap(costmap_2d::Costmap2DROS *static_map, int max_layers,
                  ros::Duration time_resolution, std::string dynamic_layers_plugin) :
     static_map_(static_map),
-    time_resolution_(time_resolution)
+    time_resolution_(time_resolution),
+    dl_loader_("lattice_planner", "lattice_planner::DynamicLayers")
+
   {
     //load the plugin for the dynamic layers
-    pluginlib::ClassLoader<lattice_planner::DynamicLayers>
-        dynamic_layer_loader("lattice_planner", "lattice_planner::DynamicLayers");
-
     try
     {
+      ROS_INFO("dynamic_costmap: Using dynamic layers plugin %s",
+               dynamic_layers_plugin.c_str());
+
       dynamic_layers_ =
-          dynamic_layer_loader.createInstance(dynamic_layers_plugin);
-      ROS_INFO("Using dynamic layers plugin %s", dynamic_layers_plugin.c_str());
+          dl_loader_.createInstance(dynamic_layers_plugin);
+
       dynamic_layers_->initialize(static_map, max_layers, time_resolution);
     }
+
     catch(pluginlib::PluginlibException& ex)
     {
       ROS_ERROR("dynamic_costmap: failed to load dynamic layers plugin: %s", ex.what());
     }
+  }
+
+  ~DynamicCostmap()
+  {
+    //clean up
+    delete static_map_;
+    dynamic_layers_.reset();
   }
 
   /**
@@ -208,6 +218,7 @@ public:
 protected:
 
   costmap_2d::Costmap2DROS* static_map_; ///< static layer
+  pluginlib::ClassLoader<lattice_planner::DynamicLayers> dl_loader_;
   boost::shared_ptr<lattice_planner::DynamicLayers> dynamic_layers_; ///< dynamic layers, defined as plugin
   ros::Duration time_resolution_; ///< time resolution of dynamic layers
 
