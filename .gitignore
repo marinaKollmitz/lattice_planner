@@ -26,3 +26,9 @@
 *.exe
 *.out
 *.app
+
+# Tilda files
+*~
+
+#Qt Creator project files
+*.user
