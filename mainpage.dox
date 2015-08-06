@@ -11,15 +11,15 @@ cost factors:
 - lethal_cost --> cost associated with forbidden areas (e.g. obstacles)
 - time_cost_factor --> cost factor for path execution time
 - step_cost_factor --> cost factor for path length
-- rotation_cost_factor --> cost factor defined in the dynamic environment, according to the dynamic cost map
-- environment_cost_factor --> cost factor for the accumulated turns along a planned path
+- rotation_cost_factor --> cost factor for the accumulated turns along a planned path 
+- environment_cost_factor --> cost factor for constraints defined in the dynamic environment, according to the dynamic cost map
 - dynamic_layers_plugin --> fully qualified plugin type for dynamic layers to be used (must adhere to lattice_planner::DynamicLayers interface. See pluginlib doc on ROS wiki for help)
 
 planner preferences:
 - allow_unknown --> whether the planner is allowed to expand into unknown map regions
 - xy_goal_tolerance --> the Euclidean goal tolerance distance in meters
 - yaw_goal_tolerance --> the rotational goal tolerance in rad
-- time_step --> time resolution of the discretized configuration space in seconds
+- time_resolution --> time resolution of the discretized configuration space in seconds
 - collision_check_time_resolution --> time increment to slice trajectories for collision checking in seconds
 - time_steps_lookahead --> maximum number of time steps for planning
 - planning_timeout --> timeout for the planning after which the best solution found so far is returned
