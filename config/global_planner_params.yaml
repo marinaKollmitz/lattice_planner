@@ -1,0 +1,56 @@
+# Node parameters for using the lattice planner as global planner with move base. 
+# For more information about the move base parameters in this file, please see
+#
+#  http://www.ros.org/wiki/move_base
+#
+
+shutdown_costmaps: false
+
+#disable recovery behaviors
+recovery_behavior_enabled: false
+
+#planner frequency 
+planner_frequency: 2.0 
+planner_patience: 5.0
+
+#disable oscillation checking
+oscillation_timeout: 0.0
+oscillation_distance: 0.0
+
+#use lattice planner as the global planner
+base_global_planner: lattice_planner/TBPlanner
+
+#lattice planner params
+TBPlanner:
+    #cost factors
+    lethal_cost: 253 # cost associated with forbidden areas (e.g. obstacles). default: costmap_2d::INSCRIBED_INFLATED_OBSTACLE( = 253)
+    time_cost_factor: 200.0 #cost factor for path execution time. default: 200.0
+    step_cost_factor: 80.0 #cost factor for path length. default: 80.0
+    rotation_cost_factor: 0.0 #cost factor for the accumulated turns along a planned path
+    environment_cost_factor: 1.0 #cost factor for constraints defined in the dynamic environment, according to the dynamic cost map
+    dynamic_layers_plugin: dynamic_social_costmap::SocialLayers #fully qualified plugin type for dynamic layers to be used by dynamic cost map, in this case SocialLayers plugin from human_aware_navigation stack (https://github.com/marinaKollmitz/human_aware_navigation). default: "undefined"
+
+    #planner preferences
+    allow_unknown: false #whether the planner is allowed to expand into unknown map regions. default: false
+    xy_goal_tolerance: 0.15 #the Euclidean goal tolerance distance in meters. default: 0.15
+    yaw_goal_tolerance: 0.2 #the rotational goal tolerance in rad. default: 0.2
+    time_resolution: 0.5 #time resolution of the discretized configuration space in seconds. default: 0.5
+    collision_check_time_resolution: 0.1 #time increment to slice trajectories for collision checking in seconds. default: 0.1
+    time_steps_lookahead: 15 #maximum number of time steps for planning
+    planning_timeout: 0.48 #timeout for the planning after which the best solution found so far is returned, in seconds. should be a little smaller than (1/planner_frequency). default: 0.48
+    passive_navigation: false #flag for planning dynamically for the max number of time steps, not only until the goal is found. default: false
+    publish_expanded: false #flag for publishing the expanded search tree for visualization. default: false
+
+    #flags for simplifying the path search - violate optimality but accelerate the search procedure
+    easy_deceleration: false #flag for simplified planning of deceleration at the goal. default: false
+    easy_turn_at_start: false #flag for simplified planning of turn in place at the start. default: false
+    easy_turn_at_goal: false #flag for simplified planning of turn in place at the goal. default: false
+
+    #motion constraints of the robot:
+    min_vel_x: 0.0 #minimum forward velocity of the robot in meters per second (can be negative). default: 0.0
+    max_vel_x: 0.4 #maximum forward velocity of the robot in meters per second. default: 0.4
+    acceleration_x: 0.8 #forward acceleration in meters per second^2. default: 0.8
+    min_vel_phi: -0.8 #minimum angular velocity of the robot in radians per second (can be negative). default: -0.8
+    max_vel_phi: 0.8 #maximum angular velocity of the robot in radians per second. default: 0.8
+    acceleration_phi: 1.6 #angular acceleration in radians per second^2. default: 0.8
+
