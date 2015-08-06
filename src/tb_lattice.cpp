@@ -75,7 +75,7 @@ AStarLattice::AStarLattice(std::string name,costmap_2d::Costmap2DROS *costmap)
   CostManager::CostFactors cost_factors;
   private_nh.param("lethal_cost", cost_factors.lethal_cost,
                    (int)costmap_2d::INSCRIBED_INFLATED_OBSTACLE);
-  private_nh.param("time_cost_factor", cost_factors.time_cost, 100.0);
+  private_nh.param("time_cost_factor", cost_factors.time_cost, 200.0);
   private_nh.param("step_cost_factor", cost_factors.step_cost, 20.0);
   private_nh.param("rotation_cost_factor", cost_factors.rotation_cost, 5.0);
   private_nh.param("environment_cost_factor", cost_factors.environment_cost, 1.0);
@@ -85,13 +85,13 @@ AStarLattice::AStarLattice(std::string name,costmap_2d::Costmap2DROS *costmap)
   double collision_check_time_res;
   private_nh.param("allow_unknown", allow_unknown_, false);
   private_nh.param("xy_goal_tolerance", xy_goal_tolerance_, 0.15);
-  private_nh.param("yaw_goal_tolerance", yaw_goal_tolerance_, M_PI/17);
-  private_nh.param("time_step", time_resolution_, 0.5);
+  private_nh.param("yaw_goal_tolerance", yaw_goal_tolerance_, 0.2);
+  private_nh.param("time_resolution", time_resolution_, 0.5);
   private_nh.param("collision_check_time_resolution", collision_check_time_res, 0.1);
-  private_nh.param("time_steps_lookahead", max_timesteps_, 20);
-  private_nh.param("planning_timeout", planning_timeout_, 0.5);
-  private_nh.param("passive_navigation", passive_navigation_, true);
-  private_nh.param("publish_expanded", publish_expanded_, true);
+  private_nh.param("time_steps_lookahead", max_timesteps_, 15);
+  private_nh.param("planning_timeout", planning_timeout_, 0.48);
+  private_nh.param("passive_navigation", passive_navigation_, false);
+  private_nh.param("publish_expanded", publish_expanded_, false);
 
   //motion constraints
   MotionConstraints motion_constraints;
