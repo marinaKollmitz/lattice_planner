@@ -49,6 +49,8 @@ add_library(
     src/state_discretizer.cpp
 )
 
+add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_gencpp)
+
 target_link_libraries(
   ${PROJECT_NAME}
     ${catkin_LIBRARIES}
