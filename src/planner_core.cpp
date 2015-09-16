@@ -81,8 +81,8 @@ void TBLatticePlanner::initialize(std::string name, costmap_2d::Costmap2DROS* co
 
     //init replanning service
     replan_service_ =
-        private_nh.advertiseService("replan",
-                                    &TBLatticePlanner::replanServiceCallback,this);
+        nh.advertiseService("move_base/replan",
+                            &TBLatticePlanner::replanServiceCallback,this);
 
     path_pub_ = private_nh.advertise<nav_msgs::Path>("path", 1);
 
