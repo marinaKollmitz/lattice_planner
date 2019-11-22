@@ -112,8 +112,8 @@ struct DiscreteState
    */
   double getManhattanDistance(DiscreteState other)
   {
-    int num_x = abs(x_i - other.x_i);
-    int num_y = abs(y_i - other.y_i);
+    int num_x = abs(int(x_i - other.x_i));
+    int num_y = abs(int(y_i - other.y_i));
 
     return num_x + num_y;
   }
@@ -128,8 +128,8 @@ struct DiscreteState
    */
   double getDiagonalDistance(DiscreteState other)
   {
-    int num_x = abs(x_i - other.x_i);
-    int num_y = abs(y_i - other.y_i);
+    int num_x = abs(int(x_i - other.x_i));
+    int num_y = abs(int(y_i - other.y_i));
     int max = std::max(num_x, num_y);
     int min = std::min(num_x, num_y);
 
