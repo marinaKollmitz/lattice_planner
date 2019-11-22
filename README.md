@@ -1,6 +1,21 @@
 # lattice_planner
 The lattice_planner package provides a move_base global planner plugin for a time-bounded A* lattice planner. The planner is designed to plan time dependent, dynamically feasible navigation paths for robots with differential drive constraints. It uses a dynamic cost map which is based on the ROS costmap representation from the costmap_2d package.
 
+Please have a look at the [human_aware_navigation package](https://github.com/marinaKollmitz/human_aware_navigation) for an example application including a toy example in the context of human-aware navigation.
+
+If you use our lattice planner code for your research, please consider citing our paper:
+
+```
+@INPROCEEDINGS{kollmitz15ecmr,
+  author = {Marina Kollmitz and Kaijen Hsiao and Johannes Gaa and Wolfram Burgard},
+  title = {Time Dependent Planning on a Layered Social Cost Map for Human-Aware Robot Navigation},
+  booktitle = {Proc.~of the IEEE Eur.~Conf.~on Mobile Robotics (ECMR)},
+  year = {2015},
+  doi = {10.1109/ECMR.2015.7324184},
+  url = {http://ais.informatik.uni-freiburg.de/publications/papers/kollmitz15ecmr.pdf}
+}
+```
+
 the following ROS Parameters can be specified for the lattice_planner:
 
 prefix for all ROS params: move_base/TBLattice/ 
