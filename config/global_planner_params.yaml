@@ -10,7 +10,7 @@ shutdown_costmaps: false
 recovery_behavior_enabled: false
 
 #planner frequency 
-planner_frequency: 2.0 
+planner_frequency: 20
 planner_patience: 5.0
 
 #disable oscillation checking
@@ -26,7 +26,7 @@ TBPlanner:
     lethal_cost: 253 # cost associated with forbidden areas (e.g. obstacles). default: costmap_2d::INSCRIBED_INFLATED_OBSTACLE( = 253)
     time_cost_factor: 200.0 #cost factor for path execution time. default: 200.0
     step_cost_factor: 80.0 #cost factor for path length. default: 80.0
-    rotation_cost_factor: 0.0 #cost factor for the accumulated turns along a planned path
+    rotation_cost_factor: 200 #cost factor for the accumulated turns along a planned path
     environment_cost_factor: 1.0 #cost factor for constraints defined in the dynamic environment, according to the dynamic cost map
     dynamic_layers_plugin: dynamic_social_costmap::SocialLayers #fully qualified plugin type for dynamic layers to be used by dynamic cost map, in this case SocialLayers plugin from human_aware_navigation stack (https://github.com/marinaKollmitz/human_aware_navigation). default: "undefined"
 
@@ -37,7 +37,7 @@ TBPlanner:
     time_resolution: 0.5 #time resolution of the discretized configuration space in seconds. default: 0.5
     collision_check_time_resolution: 0.1 #time increment to slice trajectories for collision checking in seconds. default: 0.1
     time_steps_lookahead: 15 #maximum number of time steps for planning
-    planning_timeout: 0.48 #timeout for the planning after which the best solution found so far is returned, in seconds. should be a little smaller than (1/planner_frequency). default: 0.48
+    planning_timeout: 0.4 #timeout for the planning after which the best solution found so far is returned, in seconds. should be a little smaller than (1/planner_frequency). default: 0.48
     passive_navigation: false #flag for planning dynamically for the max number of time steps, not only until the goal is found. default: false
     publish_expanded: false #flag for publishing the expanded search tree for visualization. default: false
 
@@ -52,5 +52,5 @@ TBPlanner:
     acceleration_x: 0.8 #forward acceleration in meters per second^2. default: 0.8
     min_vel_phi: -0.8 #minimum angular velocity of the robot in radians per second (can be negative). default: -0.8
     max_vel_phi: 0.8 #maximum angular velocity of the robot in radians per second. default: 0.8
-    acceleration_phi: 1.6 #angular acceleration in radians per second^2. default: 0.8
+    acceleration_phi: 0.5 #angular acceleration in radians per second^2. default: 0.8
 
