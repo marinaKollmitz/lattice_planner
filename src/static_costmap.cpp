@@ -88,120 +88,120 @@ void StaticLayers::initialize(costmap_2d::Costmap2DROS* static_map,
 
 void StaticLayers::update()
 {
-  people_msgs::People people_k; //people in one timestep
-  people_msgs::People people_kplus1; //people in the next timestep
+  // people_msgs::People people_k; //people in one timestep
+  // people_msgs::People people_kplus1; //people in the next timestep
 
-  people_msgs::Person person_k; //person in one timestep
-  people_msgs::Person person_kplus1; //person in the next timestep
-  geometry_msgs::PoseStamped person_pose; //person with header
+  // people_msgs::Person person_k; //person in one timestep
+  // people_msgs::Person person_kplus1; //person in the next timestep
+  // geometry_msgs::PoseStamped person_pose; //person with header
 
-  double person_x, person_y; //coordinates of one person
-  double angle_k; //angle in one timestep
-  double angle_kplus1; //angle in the next timestep
-  double person_angle; //angle of the person
+  // double person_x, person_y; //coordinates of one person
+  // double angle_k; //angle in one timestep
+  // double angle_kplus1; //angle in the next timestep
+  // double person_angle; //angle of the person
 
-  lattice_planner::TimedCostmap* timed_map; //one layer
-  ros::Duration t_inkr; //time inkrement for the interpolation between two time steps
+  // lattice_planner::TimedCostmap* timed_map; //one layer
+  // ros::Duration t_inkr; //time inkrement for the interpolation between two time steps
 
-  //fill all costmaps with zero value
-  for(int i=0; i<timed_costmap_.size(); i++)
-  {
-    timed_map = timed_costmap_.at(i);
-    std::fill(timed_map->costmap, timed_map->costmap +
-              (timed_map->size_x * timed_map->size_y), 0);
-    timed_map->time = ros::Time(0);
-  }
+  // //fill all costmaps with zero value
+  // for(int i=0; i<timed_costmap_.size(); i++)
+  // {
+  //   timed_map = timed_costmap_.at(i);
+  //   std::fill(timed_map->costmap, timed_map->costmap +
+  //             (timed_map->size_x * timed_map->size_y), 0);
+  //   timed_map->time = ros::Time(0);
+  // }
 
-  int timedmaps_index = 0;
+  // int timedmaps_index = 0;
 
-  //loop through the array of the predicted people and mark each prediction
-  //in the corresponding dynamic cost map layer
-  for(int i = 0; i < ((int) predicted_people_.predicted_people.size() - 1); i++)
-  {
+  // //loop through the array of the predicted people and mark each prediction
+  // //in the corresponding dynamic cost map layer
+  // for(int i = 0; i < ((int) predicted_people_.predicted_people.size() - 1); i++)
+  // {
 
-    if(timedmaps_index < max_layers_)
-    {
-      //find the predictions from the requested time step until the next
-      people_k = predicted_people_.predicted_people.at(i);
-      people_kplus1 = predicted_people_.predicted_people.at(i+1);
-      ros::Duration delta_t_steps = people_kplus1.header.stamp - people_k.header.stamp;
+  //   if(timedmaps_index < max_layers_)
+  //   {
+  //     //find the predictions from the requested time step until the next
+  //     people_k = predicted_people_.predicted_people.at(i);
+  //     people_kplus1 = predicted_people_.predicted_people.at(i+1);
+  //     ros::Duration delta_t_steps = people_kplus1.header.stamp - people_k.header.stamp;
 
-      /**
-       * @todo enforce the specified time for the dynamic cost map layers. Right
-       *       now the time resolution is defined by the people prediction rate
-       **/
-      if(fabs((delta_t_steps -  time_resolution_).toSec()) > 0.1)
-      {
-        ROS_WARN_ONCE("dynamic costmap: the time resolution of the people prediction "
-                      "does not match the specified resolution for the social navigation "
-                      "planner.");
-        ROS_WARN_ONCE("Planner: %f, prediction: %f", time_resolution_.toSec(), delta_t_steps.toSec());
-      }
+  //     /**
+  //      * @todo enforce the specified time for the dynamic cost map layers. Right
+  //      *       now the time resolution is defined by the people prediction rate
+  //      **/
+  //     if(fabs((delta_t_steps -  time_resolution_).toSec()) > 0.1)
+  //     {
+  //       ROS_WARN_ONCE("dynamic costmap: the time resolution of the people prediction "
+  //                     "does not match the specified resolution for the social navigation "
+  //                     "planner.");
+  //       ROS_WARN_ONCE("Planner: %f, prediction: %f", time_resolution_.toSec(), delta_t_steps.toSec());
+  //     }
 
-      //get the corresponding dynamic cost map layer
-      timed_map = timed_costmap_.at(timedmaps_index);
-      if(timed_map->time == ros::Time(0))
-        timed_map->time = people_k.header.stamp; //stamp it, if necessary
+  //     //get the corresponding dynamic cost map layer
+  //     timed_map = timed_costmap_.at(timedmaps_index);
+  //     if(timed_map->time == ros::Time(0))
+  //       timed_map->time = people_k.header.stamp; //stamp it, if necessary
 
 
-      //loop through all predicted people in the time interval to mark them
-      //in the cost map layer
-      for(int j=0; j<people_k.people.size(); j++)
-      {
-        person_k = people_k.people.at(j);
-        person_kplus1 = people_kplus1.people.at(j);
-        //calculate the angle for a person by assuming that they walk forward
-        angle_k = atan2(person_k.velocity.y, person_k.velocity.x);
-        angle_kplus1 = atan2(person_kplus1.velocity.y, person_kplus1.velocity.x);
+  //     //loop through all predicted people in the time interval to mark them
+  //     //in the cost map layer
+  //     for(int j=0; j<people_k.people.size(); j++)
+  //     {
+  //       person_k = people_k.people.at(j);
+  //       person_kplus1 = people_kplus1.people.at(j);
+  //       //calculate the angle for a person by assuming that they walk forward
+  //       angle_k = atan2(person_k.velocity.y, person_k.velocity.x);
+  //       angle_kplus1 = atan2(person_kplus1.velocity.y, person_kplus1.velocity.x);
 
-        //mark the human in the cost map layer. To capture the predicted trajectory,
-        //we interpolate between the pose at time step k and the pose at step (k+1)
-        //by using a finer time resolution t_step_resolution_
-        t_inkr = ros::Duration(0.0);
-        if(delta_t_steps > ros::Duration(0.0))
-        {
-          //the linear interpolation
-          while(t_inkr <= delta_t_steps)
-          {
-            //find the intermediate interpolated pose of a person
-            person_x = person_k.position.x
-                + ( (person_kplus1.position.x - person_k.position.x)
-                    * (t_inkr.toSec() / delta_t_steps.toSec()) );
-            person_y = person_k.position.y
-                + ( (person_kplus1.position.y - person_k.position.y)
-                    * (t_inkr.toSec() / delta_t_steps.toSec()) );
-            person_angle = angle_k
-                + ( (angle_kplus1 - angle_k) * (t_inkr.toSec() / delta_t_steps.toSec()) );
+  //       //mark the human in the cost map layer. To capture the predicted trajectory,
+  //       //we interpolate between the pose at time step k and the pose at step (k+1)
+  //       //by using a finer time resolution t_step_resolution_
+  //       t_inkr = ros::Duration(0.0);
+  //       if(delta_t_steps > ros::Duration(0.0))
+  //       {
+  //         //the linear interpolation
+  //         while(t_inkr <= delta_t_steps)
+  //         {
+  //           //find the intermediate interpolated pose of a person
+  //           person_x = person_k.position.x
+  //               + ( (person_kplus1.position.x - person_k.position.x)
+  //                   * (t_inkr.toSec() / delta_t_steps.toSec()) );
+  //           person_y = person_k.position.y
+  //               + ( (person_kplus1.position.y - person_k.position.y)
+  //                   * (t_inkr.toSec() / delta_t_steps.toSec()) );
+  //           person_angle = angle_k
+  //               + ( (angle_kplus1 - angle_k) * (t_inkr.toSec() / delta_t_steps.toSec()) );
 
-            person_pose.header = people_k.header;
-            person_pose.pose.position.x = person_x;
-            person_pose.pose.position.y = person_y;
-            tf::quaternionTFToMsg(tf::createQuaternionFromYaw(person_angle),
-                                  person_pose.pose.orientation);
+  //           person_pose.header = people_k.header;
+  //           person_pose.pose.position.x = person_x;
+  //           person_pose.pose.position.y = person_y;
+  //           tf::quaternionTFToMsg(tf::createQuaternionFromYaw(person_angle),
+  //                                 person_pose.pose.orientation);
 
-            //get the position of the person in the map
-            int person_in_map_x, person_in_map_y;
-            double person_in_map_angle;
+  //           //get the position of the person in the map
+  //           int person_in_map_x, person_in_map_y;
+  //           double person_in_map_angle;
 
-            if(getCostmapCoordinates(&person_pose, person_in_map_x,
-                                     person_in_map_y, person_in_map_angle));
-            {
-              //if position is in the map, mark it in the map (put Gaussian cost
-              //values around position
-              markHumanInCostmap(person_in_map_x, person_in_map_y,
-                                 person_in_map_angle, timed_map);
-            }
+  //           if(getCostmapCoordinates(&person_pose, person_in_map_x,
+  //                                    person_in_map_y, person_in_map_angle));
+  //           {
+  //             //if position is in the map, mark it in the map (put Gaussian cost
+  //             //values around position
+  //             markHumanInCostmap(person_in_map_x, person_in_map_y,
+  //                                person_in_map_angle, timed_map);
+  //           }
 
-            //enlarge time inkrement for next interpolation step
-            t_inkr += interpolation_time_step_;
-          }
-        }
-      }
+  //           //enlarge time inkrement for next interpolation step
+  //           t_inkr += interpolation_time_step_;
+  //         }
+  //       }
+  //     }
 
-      //take the next cost map layer
-      if(delta_t_steps >= time_resolution_)
-        timedmaps_index ++;
-    }
+  //     //take the next cost map layer
+  //     if(delta_t_steps >= time_resolution_)
+  //       timedmaps_index ++;
+  //   }
   }
 
   //publish the cost map and cost cloud at the current positions of the predicted
