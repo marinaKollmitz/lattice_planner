@@ -202,7 +202,7 @@ void StaticLayers::update()
   //     if(delta_t_steps >= time_resolution_)
   //       timedmaps_index ++;
   //   }
-  }
+  // }
 
   //publish the cost map and cost cloud at the current positions of the predicted
   //people for visualization
