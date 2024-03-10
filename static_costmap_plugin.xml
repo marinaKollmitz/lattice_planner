@@ -1,0 +1,5 @@
+<library path="lib/libstatic_costmap">
+  <class type="dynamic_social_costmap::StaticLayers" base_class_type="lattice_planner::DynamicLayers">
+    <description>Plugin for the dynamic layers of the dynamic cost map that represent social navigation constraints</description>
+  </class>
+</library>
