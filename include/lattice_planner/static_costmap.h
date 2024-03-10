@@ -50,7 +50,7 @@
 // #include <people_msgs/PeoplePrediction.h>
 
 #include <dynamic_reconfigure/server.h>
-#include <SocialCostmapConfig.h>
+#include <dynamic_social_costmap/SocialCostmapConfig.h>
 
 #include <pluginlib/class_list_macros.h>
 
