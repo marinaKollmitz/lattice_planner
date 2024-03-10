@@ -37,6 +37,7 @@
 
   <export>
       <nav_core plugin="${prefix}/global_planner_plugin.xml" />
+      <lattice_planner plugin="${prefix}/static_costmap_plugin.xml" />
   </export> 
 
 </package>

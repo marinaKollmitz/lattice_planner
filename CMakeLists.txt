@@ -28,6 +28,10 @@ generate_messages(
     geometry_msgs
 )
 
+generate_dynamic_reconfigure_options(
+   cfg/SocialCostmap.cfg
+)
+
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES ${PROJECT_NAME}
@@ -47,6 +51,7 @@ add_library(
     src/heuristics.cpp
     src/dijkstra.cpp
     src/state_discretizer.cpp
+    src/static_costmap.cpp
 )
 
 add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_gencpp)
