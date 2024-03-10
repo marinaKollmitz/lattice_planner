@@ -51,6 +51,7 @@
 
 #include <dynamic_reconfigure/server.h>
 #include <lattice_planner/SocialCostmapConfig.h>
+#include <tf2/utils.h>
 
 #include <pluginlib/class_list_macros.h>
 
