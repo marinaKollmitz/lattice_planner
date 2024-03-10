@@ -34,7 +34,7 @@
  * Author: Marina Kollmitz
  ******************************************************************************/
 
-#include<static_costmap.h>
+#include<lattice_planner/static_costmap.h>
 
 PLUGINLIB_EXPORT_CLASS(dynamic_social_costmap::StaticLayers, lattice_planner::DynamicLayers)
 
