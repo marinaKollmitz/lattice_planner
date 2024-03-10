@@ -16,6 +16,7 @@ find_package(catkin REQUIRED
     roscpp
     tf
     message_generation
+    pcl_conversions
 )
 
 add_message_files(
