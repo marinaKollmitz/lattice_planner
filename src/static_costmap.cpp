@@ -345,11 +345,11 @@ void StaticLayers::reconfigureCB(dynamic_social_costmap::SocialCostmapConfig &co
   }
 }
 
-void StaticLayers::peopleCallback(const people_msgs::PeoplePredictionConstPtr people)
-{
-  ROS_DEBUG("dynamic costmap: received people callback");
-  predicted_people_ = *people;
-}
+// void StaticLayers::peopleCallback(const people_msgs::PeoplePredictionConstPtr people)
+// {
+//   ROS_DEBUG("dynamic costmap: received people callback");
+//   predicted_people_ = *people;
+// }
 
 double StaticLayers::calcGaussian(double pos_x, double pos_y, double origin_x,
                                   double origin_y, double amplitude, double variance_x,
