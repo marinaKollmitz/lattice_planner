@@ -231,11 +231,14 @@ bool AStarLattice::findReplanningWaypoint(ros::Time conti_time,
     {
       ROS_DEBUG("turn in place. update pose with amcl");
       // tf::Stamped<tf::Pose> robot_pose;
-      geometry_msgs::PoseStamped robot_pose;
-      if(dynamic_costmap_->getStaticROSCostmap()->getRobotPose(robot_pose))
+      geometry_msgs::PoseStamped robot_pose_stamped;
+      if(dynamic_costmap_->getStaticROSCostmap()->getRobotPose(robot_pose_stamped))
       {
-        conti_pose.pose.position.x = robot_pose.pose.getOrigin().getX();
-        conti_pose.pose.position.y = robot_pose.pose.getOrigin().getY();
+        tf::Pose robot_pose;
+        tf::poseMsgToTF(robot_pose_stamped.pose, robot_pose);
+
+        conti_pose.pose.position.x = robot_pose.getOrigin().getX();
+        conti_pose.pose.position.y = robot_pose.getOrigin().getY();
       }
     }
   }
