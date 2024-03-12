@@ -213,7 +213,8 @@ bool TBLatticePlanner::makePlan(const geometry_msgs::PoseStamped& start,
     replanning_requested_ = false;
   }
 
-  continuous = true; //ADA EVIL TRICK
+  // continuous = true; //ADA EVIL TRICK -> will get confused more often 
+  // because can't find current velocity
 
   goal_pose_ = goal_fixed_frame;
 
