@@ -213,6 +213,8 @@ bool TBLatticePlanner::makePlan(const geometry_msgs::PoseStamped& start,
     replanning_requested_ = false;
   }
 
+  continuous = true; //ADA EVIL TRICK
+
   goal_pose_ = goal_fixed_frame;
 
   bool planning_ok = planner_->getPath(start_fixed_frame, goal_fixed_frame,
